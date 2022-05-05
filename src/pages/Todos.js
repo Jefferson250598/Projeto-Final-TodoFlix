@@ -1,55 +1,36 @@
 import React from "react"
 import styled from "styled-components"
-import Carousel from "nuka-carousel"
 
-const Img = styled.img`
-width:30vw;
+const Title = styled.h2`
+margin-left:2.5vw;
 `
-const BoxInicio = styled.div`
-font-size:1.5vw;
-display:flex;
-width:70%;
-justify-content:space-between;
-`
-
-const BoxTexto = styled.div`
-
-width:35vw;
-height:30vh;
-display:flex;
-flex-direction:column;
-justify-content:space-around;
-font-size:1.2vw;
+const Input = styled.input`
+background-color:#2C2C2C;
+height:4.5vh;
+width:30.2vw;
+color:#fff;
+position:absolute;
+left:62.8vw;
+top:2%;
 
 `
 
-const Container = styled.div`
-margin-left:2.9vw;
-margin-top:10vh;
-
-
+const Imagem = styled.img`
+width:15vw;
 `
-const ImgCarousel = styled.img`
-width:20vw;
-`
-
  const Card = styled.div`
- width:20vw;
+ width:15vw;
  font-size:1vw;
  margin-top:5vh;
+ margin:2vw;
  `
-const Destaque = styled.h3`
-margin-top:5vh;
-
+const BoxMap = styled.div`
+display:flex;
+flex-wrap:wrap;
+width:80vw;
 `
 
-
-
-export default class Home extends React.Component {
-
-
-
-
+export default class Todos extends React.Component {
     state = {
         filmes: [
             {
@@ -79,6 +60,7 @@ export default class Home extends React.Component {
                 imagem: "https://img.elo7.com.br/product/zoom/265F120/big-poster-filme-homem-formiga-lo02-tamanho-90x60-cm-poster-cinema.jpg",
                 sinopse:"Dr. Hank Pym transforma um talentoso ladrão no herói Homem-Formiga. Ele quer impedir que seu antigo pupilo consiga replicar a fórmula da roupa que dá o poder do encolhimento..."
             },
+
             {
                 nome: "A Era do Gelo",
                 imagem: "https://br.web.img3.acsta.net/r_1280_720/medias/nmedia/18/87/89/10/19976795.jpg",
@@ -95,42 +77,51 @@ export default class Home extends React.Component {
                 sinopse:"O Homem de Ferro é um personagem dos quadrinhos publicados pela Marvel Comics. Sua verdadeira identidade é o empresário e bilionário Tony Stark, que usa armaduras de alta tecnologia no combate ao crime..."
             },
 
-        ]
+        ],
+
+        buscaFilmes:[]
+
     }
-    render() {
-        return (
-            <Container>
-                <BoxInicio>
-                    <Img src="https://vigilianerd.com.br/wp-content/uploads/2017/01/capitao_fantastico_vigilia_nerd-1.jpg" alt="capitao" />
-
-                    <BoxTexto>
-                        <h3>Visto Recentemente</h3>
-                        <h1>Capitão Fantástico</h1>
-                        <p>Nas florestas do estado de Washington, um pai cria seus seis filhos longe da civilização, em uma rígida rotina de aventuras. Ele é forçado a deixar o isolamento e leva sua família para encarar o mundo, desafiando sua ideia do que significa ser pai.</p>
-                    </BoxTexto>
-
-
-                </BoxInicio>
-             <Destaque>Destaques</Destaque>
-             <Carousel 
-             slidesToShow={4}
-             wrapAround={true}
-             autoplay={true}
-             adaptiveHeight={true}
-             >
-                 {this.state.filmes.map((item) => (
+    componentDidMount(){
+        this.setState({
+            buscaFilmes:this.state.filmes
+        })
+    }
+    
+    filtrarFilmes = (ev) => {
+        this.setState({
+            buscaFilmes:this.state.filmes
+        })
+        
+        const filtro = this.state.filmes.filter((item) => {
+            if (item.nome.toLowerCase().includes(ev.target.value.toLowerCase())){
+                return true
+            }
+        }) 
+        this.setState({
+            buscaFilmes:filtro
+        })
+    }
+  render(){
+      return(
+          <div>
+              <Input type="text" maxlength="10" placeholder="🔍 pesquisar" onChange={this.filtrarFilmes} />
+              <Title>Todos</Title>
+              <BoxMap>
+              {this.state.buscaFilmes.map((item) => (
                      <Card>
-                       <ImgCarousel src={item.imagem} alt="img"/>
+                       <Imagem src={item.imagem} alt="img"/>
                        <h2>{item.nome}</h2>
                        <p>{item.sinopse}</p>
                        
 
                      </Card>
                  ))}
-             </Carousel>
+              </BoxMap>
+          </div>
+      )
+  }
+  
 
-            </Container>
-        )
-    }
 }
 
